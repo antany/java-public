@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Master Assignment</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Custom animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+        }
+
+        /* Hide number input arrows */
+        input[type=number]::-webkit-inner-spin-button, 
+        input[type=number]::-webkit-outer-spin-button { 
+            -webkit-appearance: none; 
+            margin: 0; 
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 min-h-screen font-sans text-slate-800 flex items-center justify-center p-4">
+
+    <!-- Main Container -->
+    <div class="glass-panel w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden relative min-h-[500px] flex flex-col transition-all duration-300">
+        
+        <!-- Header -->
+        <div class="bg-indigo-600 text-white p-4 text-center">
+            <h1 class="text-2xl font-bold"><i class="fas fa-calculator mr-2"></i>Math Master</h1>
+        </div>
+
+        <!-- VIEW 1: SETUP -->
+        <div id="setup-view" class="p-8 flex flex-col gap-6 fade-in h-full justify-center">
+            <div class="text-center">
+                <h2 class="text-xl font-semibold mb-2">Create Assignment</h2>
+                <p class="text-slate-500 text-sm">Select operations and number range.</p>
+            </div>
+
+            <!-- Operations -->
+            <div class="space-y-3">
+                <label class="font-medium block text-sm uppercase tracking-wide text-slate-500">Operations</label>
+                <div class="grid grid-cols-2 gap-3">
+                    <label class="cursor-pointer border-2 border-indigo-100 rounded-lg p-3 hover:bg-indigo-50 flex items-center gap-3 transition-colors has-[:checked]:border-indigo-500 has-[:checked]:bg-indigo-50">
+                        <input type="checkbox" class="w-5 h-5 accent-indigo-600 operation-check" value="+" checked>
+                        <span class="font-bold text-lg text-indigo-700">+</span> Addition
+                    </label>
+                    <label class="cursor-pointer border-2 border-indigo-100 rounded-lg p-3 hover:bg-indigo-50 flex items-center gap-3 transition-colors has-[:checked]:border-indigo-500 has-[:checked]:bg-indigo-50">
+                        <input type="checkbox" class="w-5 h-5 accent-indigo-600 operation-check" value="-">
+                        <span class="font-bold text-lg text-indigo-700">&minus;</span> Subtraction
+                    </label>
+                    <label class="cursor-pointer border-2 border-indigo-100 rounded-lg p-3 hover:bg-indigo-50 flex items-center gap-3 transition-colors has-[:checked]:border-indigo-500 has-[:checked]:bg-indigo-50">
+                        <input type="checkbox" class="w-5 h-5 accent-indigo-600 operation-check" value="*">
+                        <span class="font-bold text-lg text-indigo-700">&times;</span> Multiplication
+                    </label>
+                    <label class="cursor-pointer border-2 border-indigo-100 rounded-lg p-3 hover:bg-indigo-50 flex items-center gap-3 transition-colors has-[:checked]:border-indigo-500 has-[:checked]:bg-indigo-50">
+                        <input type="checkbox" class="w-5 h-5 accent-indigo-600 operation-check" value="/">
+                        <span class="font-bold text-lg text-indigo-700">&div;</span> Division
+                    </label>
+                </div>
+            </div>
+
+            <!-- Range & Count -->
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="font-medium block text-sm uppercase tracking-wide text-slate-500 mb-1">Min Number</label>
+                    <input type="number" id="min-val" value="1" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-3 text-center font-bold text-lg focus:ring-2 focus:ring-indigo-500 outline-none">
+                </div>
+                <div>
+                    <label class="font-medium block text-sm uppercase tracking-wide text-slate-500 mb-1">Max Number</label>
+                    <input type="number" id="max-val" value="10" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-3 text-center font-bold text-lg focus:ring-2 focus:ring-indigo-500 outline-none">
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                     <label class="font-medium block text-sm uppercase tracking-wide text-slate-500 mb-1">Total Questions</label>
+                     <select id="total-questions" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-3 font-medium outline-none">
+                         <option value="5">5 Questions</option>
+                         <option value="10" selected>10 Questions</option>
+                         <option value="20">20 Questions</option>
+                         <option value="50">50 Questions</option>
+                         <option value="100">100 Questions</option>
+                     </select>
+                </div>
+                <div>
+                     <label class="font-medium block text-sm uppercase tracking-wide text-slate-500 mb-1">Time Limit</label>
+                     <select id="time-limit" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-3 font-medium outline-none">
+                         <option value="0" selected>No Limit</option>
+                         <option value="30">30 Seconds</option>
+                         <option value="60">1 Minute</option>
+                         <option value="120">2 Minutes</option>
+                         <option value="300">5 Minutes</option>
+                         <option value="600">10 Minutes</option>
+                         <option value="900">15 Minutes</option>
+                         <option value="1200">20 Minutes</option>
+                     </select>
+                </div>
+            </div>
+
+            <!-- Error Message Container -->
+            <div id="setup-error" class="hidden text-red-500 text-sm text-center font-medium bg-red-50 p-2 rounded-lg"></div>
+
+            <button onclick="startQuiz()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 rounded-xl shadow-lg transform transition active:scale-95 text-lg mt-auto">
+                Start Assignment
+            </button>
+        </div>
+
+        <!-- VIEW 2: QUIZ -->
+        <div id="quiz-view" class="hidden p-8 flex-col h-full justify-between fade-in">
+            <!-- Progress -->
+            <div class="w-full bg-slate-200 rounded-full h-2.5 mb-6">
+                <div id="progress-bar" class="bg-indigo-600 h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
+            </div>
+
+            <div class="flex justify-between items-center text-slate-400 text-sm font-medium uppercase tracking-wider mb-8 h-8">
+                <span id="question-tracker">Question 1/10</span>
+                <span id="timer-badge" class="hidden text-indigo-600 font-bold bg-indigo-50 px-3 py-1 rounded-full transition-colors">
+                    <i class="far fa-clock mr-2"></i><span id="time-left">00:00</span>
+                </span>
+            </div>
+
+            <!-- The Question -->
+            <div class="flex-1 flex flex-col items-center justify-center mb-8">
+                <div class="text-6xl md:text-7xl font-black text-slate-800 tracking-tight flex items-center gap-4 mb-8">
+                    <span id="operand-a">0</span>
+                    <span id="operator" class="text-indigo-500">+</span>
+                    <span id="operand-b">0</span>
+                    <span class="text-slate-300">=</span>
+                </div>
+                
+                <input type="number" id="user-answer" placeholder="?" 
+                    class="w-32 h-24 text-center text-4xl font-bold bg-slate-50 border-4 border-indigo-100 rounded-2xl focus:border-indigo-500 focus:bg-white outline-none transition-all placeholder-slate-300"
+                    onkeydown="if(event.key === 'Enter') submitAnswer()">
+            </div>
+
+            <div class="flex gap-4">
+                 <button onclick="quitQuiz()" class="flex-1 bg-slate-200 hover:bg-slate-300 text-slate-600 font-bold py-3 rounded-xl transition">
+                    Quit
+                </button>
+                <button onclick="submitAnswer()" class="flex-[2] bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl shadow-lg transform transition active:scale-95 text-lg">
+                    Next <i class="fas fa-arrow-right ml-2"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- VIEW 3: RESULTS -->
+        <div id="results-view" class="hidden p-8 flex-col items-center justify-center h-full text-center fade-in">
+            <div class="mb-6 relative">
+                <svg viewBox="0 0 36 36" class="w-32 h-32 transform -rotate-90">
+                    <path class="text-slate-100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="3" />
+                    <path id="score-circle" class="text-green-500 drop-shadow-lg transition-all duration-1000 ease-out" stroke-dasharray="0, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="3" />
+                </svg>
+                <div class="absolute inset-0 flex items-center justify-center flex-col">
+                    <span id="final-percent" class="text-3xl font-black text-slate-800">0%</span>
+                </div>
+            </div>
+
+            <h2 id="result-title" class="text-3xl font-bold text-slate-800 mb-2">Great Job!</h2>
+            <p id="result-subtitle" class="text-slate-500 mb-8">You answered <span id="score-fraction" class="font-bold text-indigo-600">0/0</span> correctly.</p>
+
+            <div class="w-full bg-slate-50 rounded-xl p-4 mb-8 max-h-48 overflow-y-auto border border-slate-100 text-left space-y-2" id="review-list">
+                <!-- Review items inserted here -->
+            </div>
+
+            <button onclick="resetApp()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 rounded-xl shadow-lg transform transition active:scale-95 text-lg">
+                Try Again <i class="fas fa-redo ml-2"></i>
+            </button>
+        </div>
+
+    </div>
+
+    <script>
+        // State Variables
+        let config = {
+            ops: [],
+            min: 1,
+            max: 10,
+            count: 10,
+            timeLimit: 0
+        };
+        let questions = [];
+        let currentIndex = 0;
+        let score = 0;
+        let userHistory = []; 
+        let timerInterval;
+        let timeRemaining;
+
+        // DOM Elements
+        const setupView = document.getElementById('setup-view');
+        const quizView = document.getElementById('quiz-view');
+        const resultsView = document.getElementById('results-view');
+        const errorBox = document.getElementById('setup-error');
+        
+        function showError(msg) {
+            errorBox.textContent = msg;
+            errorBox.classList.remove('hidden');
+            setTimeout(() => errorBox.classList.add('hidden'), 3000);
+        }
+
+        function getRandomInt(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        function startQuiz() {
+            // 1. Get Inputs
+            const checkedOps = document.querySelectorAll('.operation-check:checked');
+            config.ops = Array.from(checkedOps).map(cb => cb.value);
+            config.min = parseInt(document.getElementById('min-val').value);
+            config.max = parseInt(document.getElementById('max-val').value);
+            config.count = parseInt(document.getElementById('total-questions').value);
+            config.timeLimit = parseInt(document.getElementById('time-limit').value);
+
+            // 2. Validation
+            if (config.ops.length === 0) {
+                showError("Please select at least one operation.");
+                return;
+            }
+            if (isNaN(config.min) || isNaN(config.max)) {
+                showError("Please enter valid numbers.");
+                return;
+            }
+            if (config.min >= config.max) {
+                showError("Min must be less than Max.");
+                return;
+            }
+
+            // 3. Generate Questions
+            questions = [];
+            for(let i=0; i<config.count; i++) {
+                questions.push(generateQuestion());
+            }
+
+            // 4. Reset State & Switch View
+            currentIndex = 0;
+            score = 0;
+            userHistory = [];
+            setupView.classList.add('hidden');
+            quizView.classList.remove('hidden');
+            quizView.classList.add('flex'); // Maintain flex layout
+            
+            // 5. Timer Logic
+            clearInterval(timerInterval); // Safety clear
+            const timerBadge = document.getElementById('timer-badge');
+            
+            if (config.timeLimit > 0) {
+                timeRemaining = config.timeLimit;
+                timerBadge.classList.remove('hidden');
+                timerBadge.classList.remove('text-red-600', 'bg-red-50');
+                timerBadge.classList.add('text-indigo-600', 'bg-indigo-50');
+                updateTimerDisplay();
+                
+                timerInterval = setInterval(() => {
+                    timeRemaining--;
+                    updateTimerDisplay();
+                    
+                    // Visual warning at 10 seconds
+                    if(timeRemaining <= 10) {
+                         timerBadge.classList.remove('text-indigo-600', 'bg-indigo-50');
+                         timerBadge.classList.add('text-red-600', 'bg-red-50');
+                    }
+
+                    if(timeRemaining <= 0) {
+                        clearInterval(timerInterval);
+                        finishQuiz(true); // Passed true for timesUp
+                    }
+                }, 1000);
+            } else {
+                timerBadge.classList.add('hidden');
+            }
+
+            renderQuestion();
+        }
+
+        function updateTimerDisplay() {
+            const m = Math.floor(timeRemaining / 60);
+            const s = timeRemaining % 60;
+            document.getElementById('time-left').textContent = `${m}:${s.toString().padStart(2, '0')}`;
+        }
+
+        function generateQuestion() {
+            const op = config.ops[getRandomInt(0, config.ops.length - 1)];
+            let a, b, answer;
+
+            // Logic to ensure clean numbers
+            if (op === '/') {
+                // For division, we generate the answer and divisor first to ensure integer result
+                // We want the dividend (A) to be potentially larger than max, 
+                // but the answer and the divisor (B) should be roughly within difficulty range
+                // Or to strictly stick to min/max for operands:
+                
+                // Let's stick to strict ranges for inputs where possible, but for division
+                // it's easier to reverse multiplication.
+                const val1 = getRandomInt(config.min, config.max); 
+                const val2 = getRandomInt(Math.max(1, config.min), config.max); // Avoid div by 0
+                
+                b = val2;
+                answer = val1; // The answer will be within range
+                a = val1 * val2; // The number shown will be larger
+            } 
+            else if (op === '-') {
+                // Ensure positive result for simple math
+                const val1 = getRandomInt(config.min, config.max);
+                const val2 = getRandomInt(config.min, config.max);
+                a = Math.max(val1, val2);
+                b = Math.min(val1, val2);
+                answer = a - b;
+            } 
+            else if (op === '*') {
+                a = getRandomInt(config.min, config.max);
+                b = getRandomInt(config.min, config.max);
+                answer = a * b;
+            } 
+            else {
+                // Addition
+                a = getRandomInt(config.min, config.max);
+                b = getRandomInt(config.min, config.max);
+                answer = a + b;
+            }
+
+            // Display symbol conversion
+            let displayOp = op;
+            if(op === '*') displayOp = '×';
+            if(op === '/') displayOp = '÷';
+            if(op === '-') displayOp = '−';
+
+            return { a, b, op, displayOp, answer };
+        }
+
+        function renderQuestion() {
+            const q = questions[currentIndex];
+            
+            // Text Update
+            document.getElementById('question-tracker').textContent = `Question ${currentIndex + 1}/${config.count}`;
+            document.getElementById('operand-a').textContent = q.a;
+            document.getElementById('operand-b').textContent = q.b;
+            document.getElementById('operator').textContent = q.displayOp;
+            
+            // Input Reset
+            const input = document.getElementById('user-answer');
+            input.value = '';
+            input.focus();
+
+            // Progress Bar
+            const pct = (currentIndex / config.count) * 100;
+            document.getElementById('progress-bar').style.width = `${pct}%`;
+        }
+
+        function submitAnswer() {
+            const input = document.getElementById('user-answer');
+            const val = input.value.trim();
+
+            if(val === '') {
+                input.classList.add('ring-2', 'ring-red-500');
+                setTimeout(() => input.classList.remove('ring-2', 'ring-red-500'), 500);
+                return;
+            }
+
+            const userVal = parseInt(val);
+            const q = questions[currentIndex];
+            const isCorrect = userVal === q.answer;
+
+            if(isCorrect) score++;
+
+            // Save history
+            userHistory.push({
+                question: `${q.a} ${q.displayOp} ${q.b}`,
+                correctAnswer: q.answer,
+                userAnswer: userVal,
+                isCorrect: isCorrect
+            });
+
+            // Move Next
+            currentIndex++;
+            if(currentIndex < config.count) {
+                renderQuestion();
+            } else {
+                finishQuiz();
+            }
+        }
+
+        function finishQuiz(timesUp = false) {
+            clearInterval(timerInterval);
+
+            quizView.classList.add('hidden');
+            quizView.classList.remove('flex');
+            resultsView.classList.remove('hidden');
+            resultsView.classList.add('flex');
+
+            const percentage = Math.round((score / config.count) * 100);
+            
+            // Animate Circle
+            setTimeout(() => {
+                document.getElementById('score-circle').setAttribute('stroke-dasharray', `${percentage}, 100`);
+            }, 100);
+
+            // Update Text
+            document.getElementById('final-percent').textContent = `${percentage}%`;
+            document.getElementById('score-fraction').textContent = `${score}/${config.count}`;
+            
+            // Update Title based on score
+            const title = document.getElementById('result-title');
+            const subtitle = document.getElementById('result-subtitle');
+            const circle = document.getElementById('score-circle');
+            
+            if (timesUp) {
+                title.textContent = "Time's Up!";
+                subtitle.innerHTML = `You ran out of time. You got <span class="font-bold text-indigo-600">${score}</span> right.`;
+                circle.classList.add('text-orange-500');
+                circle.classList.remove('text-yellow-400', 'text-green-500', 'text-red-500');
+            } else {
+                // Reset subtitle for normal finish
+                subtitle.innerHTML = `You answered <span id="score-fraction" class="font-bold text-indigo-600">${score}/${config.count}</span> correctly.`;
+
+                if(percentage === 100) {
+                    title.textContent = "Perfect Score! 🌟";
+                    circle.classList.add('text-yellow-400');
+                    circle.classList.remove('text-green-500', 'text-red-500', 'text-orange-500');
+                } else if (percentage >= 80) {
+                    title.textContent = "Excellent Job! 🎉";
+                    circle.classList.add('text-green-500');
+                    circle.classList.remove('text-yellow-400', 'text-red-500', 'text-orange-500');
+                } else if (percentage >= 50) {
+                    title.textContent = "Good Effort! 👍";
+                    circle.classList.add('text-orange-500');
+                    circle.classList.remove('text-yellow-400', 'text-green-500', 'text-red-500');
+                } else {
+                    title.textContent = "Keep Practicing! 💪";
+                    circle.classList.add('text-red-500');
+                    circle.classList.remove('text-yellow-400', 'text-green-500', 'text-orange-500');
+                }
+            }
+
+            // Generate Review List
+            const list = document.getElementById('review-list');
+            list.innerHTML = '';
+            
+            // If time ran out, userHistory might have fewer items than total questions.
+            // We iterate through what was answered.
+            if (userHistory.length === 0) {
+                 list.innerHTML = '<div class="text-center text-slate-400 py-4">No questions answered.</div>';
+            } else {
+                userHistory.forEach((h, index) => {
+                    const item = document.createElement('div');
+                    item.className = "flex justify-between items-center text-sm border-b border-slate-200 last:border-0 pb-2 last:pb-0";
+                    
+                    const icon = h.isCorrect 
+                        ? '<i class="fas fa-check text-green-500"></i>' 
+                        : '<i class="fas fa-times text-red-500"></i>';
+                    
+                    const detail = h.isCorrect 
+                        ? `<span class="font-bold text-slate-700">${h.userAnswer}</span>`
+                        : `<span class="text-red-400 line-through mr-2">${h.userAnswer}</span> <span class="text-green-600 font-bold">${h.correctAnswer}</span>`;
+
+                    item.innerHTML = `
+                        <div class="flex items-center gap-3">
+                            <span class="text-slate-400 w-4">${index + 1}.</span>
+                            <span class="font-medium text-slate-600">${h.question} = </span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            ${detail}
+                            ${icon}
+                        </div>
+                    `;
+                    list.appendChild(item);
+                });
+            }
+        }
+
+        function quitQuiz() {
+            if(confirm("Are you sure you want to quit? Progress will be lost.")) {
+                resetApp();
+            }
+        }
+
+        function resetApp() {
+            clearInterval(timerInterval);
+            resultsView.classList.add('hidden');
+            resultsView.classList.remove('flex');
+            quizView.classList.add('hidden');
+            quizView.classList.remove('flex');
+            
+            setupView.classList.remove('hidden');
+            
+            // Reset Progress Bar
+            document.getElementById('progress-bar').style.width = '0%';
+            document.getElementById('score-circle').setAttribute('stroke-dasharray', `0, 100`);
+        }
+
+    </script>
+</body>
+</html>
